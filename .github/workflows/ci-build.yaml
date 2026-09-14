@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     container: python:3.9-slim
 
     services:
@@ -17,17 +18,23 @@ jobs:
         image: postgres:13-alpine
         env:
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y libpq-dev gcc
 
       - name: Install dependencies
         run: |
@@ -38,7 +45,8 @@ jobs:
         run: |
           flake8 service tests --count --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Run unit tests with nosetests
-        run: nosetests -v --with-spec --spec-color
+      - name: Run unit tests
+        run: |
+          nosetests -v
         env:
-          DATABASE_URI: "postgresql://postgres:postgres@postgres:5432/postgres"
+          DATABASE_URI: postgresql://postgres:postgres@postgres:5432/postgres
