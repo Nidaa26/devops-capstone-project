@@ -2,7 +2,7 @@
 
 ![CI Build](https://github.com/nidaa26/AccountFlow/actions/workflows/ci-build.yaml/badge.svg)
 
-> Replace `nidaa26/AccountFlow` above with your actual GitHub
+> Replace `nidaa26/devops-capstone-project` above with your actual GitHub
 > username/repo name so the badge points at your own Actions run. The badge
 > turns green automatically the first time `ci-build.yaml` finishes
 > successfully on `main`.
